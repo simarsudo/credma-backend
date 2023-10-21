@@ -79,3 +79,4 @@ class EmployView(generics.ListCreateAPIView):
             serial.save()
             return Response(response)
         return Response(serial.errors)
+    
