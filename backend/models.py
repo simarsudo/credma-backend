@@ -50,6 +50,13 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return self.email
     
 
+class Company(models.Model):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+       
+
 class Student(models.Model):
     name = models.CharField(max_length=50)
     college = models.CharField(max_length=200)
@@ -63,7 +70,27 @@ class Student(models.Model):
 
 class Employ(models.Model):
     name = models.CharField(max_length=50)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
     p_info = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     
+    def __str__(self):
+        return self.name
+
+
+class Skill(models.Model):
+    name = models.CharField(max_length=20)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+
+class Project(models.Model):
+    name = models.CharField(max_length=100)
+    skill_req = models.CharField(max_length=200)
+    company = models.ForeignKey(Company, on_delete = models.CASCADE)
+    student = models.ForeignKey(CustomUser, on_delete=models.CASCADE, default=None, blank=True, null=True)
+    duration = models.DateTimeField()
+
     def __str__(self):
         return self.name

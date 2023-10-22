@@ -2,9 +2,9 @@ from rest_framework import generics
 # from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .models import CustomUser, Employ, Student
+from .models import CustomUser, Employ, Student, Project, Skill, Company
 from rest_framework.authtoken.models import Token
-from .serializers import UserSerializer, StudentSerializer, EmploySerializer
+from .serializers import UserSerializer, StudentSerializer, EmploySerializer, ProjectSerializer, SkillSerializer, CompanySerializer
 
 class UserView(generics.ListCreateAPIView):
     @api_view(['GET'])
@@ -75,6 +75,46 @@ class EmployView(generics.ListCreateAPIView):
         data['p_info'] = user
         print(data)
         serial = EmploySerializer(data=data)
+        if serial.is_valid():
+            serial.save()
+            return Response(response)
+        return Response(serial.errors)
+
+
+class ProjectView(generics.ListCreateAPIView):
+    @api_view(['GET'])
+    def Get_Project(request):
+        response = {'status':200}
+        project_obj = Project.objects.all()
+        serial = ProjectSerializer(project_obj, many=True)
+        response['data'] = serial.data
+        return Response(response)
+    
+    @api_view(['POST'])
+    def Create_Project(request):
+        response = {'status':200}
+        data = request.data
+        serial = ProjectSerializer(data=data)
+        if serial.is_valid():
+            serial.save()
+            return Response(response)
+        return Response(serial.errors)
+
+
+class CompanyView(generics.ListCreateAPIView):
+    @api_view(['GET'])
+    def Get_Company(request):
+        response = {'status':200}
+        company_obj = Company.objects.all()
+        serial = CompanySerializer(company_obj, many=True)
+        response['data'] = serial.data
+        return Response(response)
+    
+    @api_view(['POST'])
+    def Create_Company(request):
+        response = {'status':200}
+        data = request.data
+        serial = CompanySerializer(data=data)
         if serial.is_valid():
             serial.save()
             return Response(response)
