@@ -1,5 +1,4 @@
-from rest_framework import generics
-# from django.shortcuts import render
+from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .models import CustomUser, Employ, Student, Project, Skill, Company
@@ -7,13 +6,26 @@ from rest_framework.authtoken.models import Token
 from .serializers import UserSerializer, StudentSerializer, EmploySerializer, ProjectSerializer, SkillSerializer, CompanySerializer
 
 class UserView(generics.ListCreateAPIView):
-    @api_view(['GET'])
+    @api_view(['POST','GET'])
     def Get_User(request):
         response = {'status':200}
-        user_obj = CustomUser.objects.all()
-        serial = UserSerializer(user_obj, many=True)
-        response['data'] = serial.data
+        # data = request.data
+        # Email = data.email
+        # Password = data.password
+        Email = 'lallu2@gmail.com'
+        Password = '1'
+        user_obj = CustomUser.objects.get(email=Email, password=Password)
+
+        print("hohoh:   ", user_obj)
+        if user_obj:
+            user_token = Token.objects.get(user_id=user_obj).key
+            serial = UserSerializer(user_obj)
+            response['token'] = user_token
+            response['data'] = serial.data
+        else:
+            response = {'status':status.HTTP_401_UNAUTHORIZED}
         return Response(response)
+
 
 
     @api_view(['POST'])
