@@ -44,6 +44,7 @@ class UserView(generics.ListCreateAPIView):
             return Response(response)
         return Response(serial.errors)
     
+
 class StudentView(generics.ListCreateAPIView):
     @api_view(['GET'])
     def Get_Student(request):
@@ -67,6 +68,7 @@ class StudentView(generics.ListCreateAPIView):
             serial.save()
             return Response(response)
         return Response(serial.errors)
+
 
 class EmployView(generics.ListCreateAPIView):
     @api_view(['GET'])
