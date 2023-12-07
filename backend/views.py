@@ -1,14 +1,17 @@
 from rest_framework import generics, status
+from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
-from .models import CustomUser, Employ, Student, Project, Skill, Company
+from rest_framework.decorators import api_view, renderer_classes
+from .models import CustomUser, Employ, Student, Project, Company
 from rest_framework.authtoken.models import Token
-from .serializers import UserSerializer, StudentSerializer, EmploySerializer, ProjectSerializer, SkillSerializer, CompanySerializer
+from .serializers import UserSerializer, StudentSerializer, EmploySerializer, ProjectSerializer, CompanySerializer
 
-class UserView(generics.ListCreateAPIView):
+class UserView(generics.RetrieveAPIView):
+
     @api_view(['POST','GET'])
+    @renderer_classes([TemplateHTMLRenderer, JSONRenderer])
     def Get_User(request):
-        response = {'status':200}
+        response = {"status":200}
         # data = request.data
         # Email = data.email
         # Password = data.password
@@ -20,11 +23,12 @@ class UserView(generics.ListCreateAPIView):
         if user_obj:
             user_token = Token.objects.get(user_id=user_obj).key
             serial = UserSerializer(user_obj)
-            response['token'] = user_token
-            response['data'] = serial.data
+            response["token"] = user_token
+            response["data"] = serial.data
         else:
-            response = {'status':status.HTTP_401_UNAUTHORIZED}
-        return Response(response)
+            response = {"status":status.HTTP_401_UNAUTHORIZED}
+        
+        return Response(data=response, template_name = 'sim.html',)
 
 
 
@@ -134,3 +138,5 @@ class CompanyView(generics.ListCreateAPIView):
             return Response(response)
         return Response(serial.errors)
     
+
+
