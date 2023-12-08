@@ -1,5 +1,5 @@
 from rest_framework import generics, status
-from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
+from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, renderer_classes
 from .models import CustomUser, Employ, Student, Project, Company
@@ -9,7 +9,7 @@ from .serializers import UserSerializer, StudentSerializer, EmploySerializer, Pr
 class UserView(generics.RetrieveAPIView):
 
     @api_view(['POST','GET'])
-    @renderer_classes([TemplateHTMLRenderer, JSONRenderer])
+    @renderer_classes([TemplateHTMLRenderer])
     def Get_User(request):
         response = {"status":200}
         # data = request.data
